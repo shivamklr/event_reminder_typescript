@@ -4,18 +4,19 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    PrimaryColumn,
 } from "typeorm";
 
 @Entity()
 export class User {
     //TODO: implement jwt
+    @PrimaryColumn()
+    email: string;
+
     @Column({ nullable: false })
     name: string;
 
-    @PrimaryGeneratedColumn()
-    email: string;
-
-    @Column()
+    @Column({ nullable: true })
     password: string;
 
     @Column({ nullable: true })
