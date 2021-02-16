@@ -5,7 +5,6 @@ import { User } from "./entity/User";
 import { Event } from "./entity/Event";
 import { usersRoute } from "./routes/users";
 import { userRoute } from "./routes/user";
-import './utils/password'
 //creating an express instance
 const app = express();
 //body-parser

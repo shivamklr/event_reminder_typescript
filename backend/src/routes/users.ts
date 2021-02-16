@@ -5,15 +5,16 @@ const route = Router();
 // POST /users/login
 route.post("/login", (req, res) => {});
 
-//POST /users
+// POST /users
 route.post("/", async (req, res) => {
     const { name, email, password } = req.body.user;
+    console.log('user object received in req body');
     console.log({name, email, password});
     
     try {
         const user = await createUser({ name, email, password });
         
-        return res.status(201).json({ user: { ...user } });
+        return res.status(201).json({ user: { ...user, password:null } });
     } catch (error) {
         console.log(error.message);
         return res

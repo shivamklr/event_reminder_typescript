@@ -1,13 +1,12 @@
 import {
     Entity,
     Column,
-    PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
     PrimaryColumn,
 } from "typeorm";
 
-@Entity()
+@Entity("users")
 export class User {
     //TODO: implement jwt
     @PrimaryColumn()
@@ -27,4 +26,6 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    token: string;
 }
