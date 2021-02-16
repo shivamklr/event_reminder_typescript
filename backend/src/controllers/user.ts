@@ -13,6 +13,10 @@ interface UserLoginData {
     email: string;
     password: string;
 }
+interface UserJWTData{
+    email:string;
+}
+
 export async function createUser({
     name,
     email,
@@ -60,17 +64,28 @@ export async function loginUser({
     try {
         const user = await getRepository(User).findOne({ email });
         if (user === undefined) {
-            throw new Error("User with this email does not exist");
+            throw {message:"User with this email does not exist", statusCode:422};
         }
         const checkPass = await matchPassword(
             user.password as string,
             password
         );
         if (checkPass === false) {
-            throw new Error("Password does not match");
+            throw {message:"Password does not match", statusCode:401};
         }
         user.token = await createJWT(user);
         return SanitizeFields(user);
+    } catch (e) {
+        throw e;
+    }
+}
+export async function fetchUserData({email}: UserJWTData):Promise<User>{
+    try {
+        const fetchedData = await getRepository(User).findOne({email});
+        if(fetchedData === undefined){
+            throw new Error("User of that email does not exist");
+        }
+        return SanitizeFields(fetchedData);
     } catch (e) {
         throw e;
     }

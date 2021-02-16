@@ -8,7 +8,7 @@ import {
 
 @Entity("users")
 export class User {
-    //TODO: implement jwt
+    
     @PrimaryColumn()
     email: string;
 
