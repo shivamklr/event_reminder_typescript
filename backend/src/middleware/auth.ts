@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import { ErrorResponse } from "../utils/errorResponse";
 import { verifyJWT } from "../utils/jwt";
+import { SanitizeFields } from "../utils/sanitizePassword";
 
 export async function authenticateUser(
     req: Request,
@@ -8,7 +10,6 @@ export async function authenticateUser(
 ) {
     try {
         const { authorization } = req.headers;
-        console.log({ authorization });
         if (authorization === undefined) {
             throw new Error("Header missing");
         }
@@ -20,12 +21,9 @@ export async function authenticateUser(
         if (loggedInUser === undefined) {
             throw new Error("Payload is missing");
         }
-        (req as any).user = loggedInUser;
+        (req as any).user = SanitizeFields(loggedInUser);
         next();
     } catch (e) {
-        console.log(e.message);
-        return res
-            .status(e.statusCode || 401)
-            .json({ errors: { body: [e.message, "JWT Token is tampered"] } });
+        return ErrorResponse(res, e, 401, "Authentication Failed");
     }
 }

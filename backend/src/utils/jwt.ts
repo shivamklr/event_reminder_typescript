@@ -11,6 +11,7 @@ export async function createJWT(payload: User): Promise<string> {
                 email: payload.email,
             },
             JWT_SECRET,
+            {expiresIn:30},
             (err: any, JWT_TOKEN: string | undefined) => {
                 if (err) {
                     reject(err);
