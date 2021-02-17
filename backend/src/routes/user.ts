@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { fetchUserData } from "../controllers/user";
+import { fetchUserData, updateUserData } from "../controllers/users";
 import { authenticateUser } from "../middleware/auth";
 import { ErrorResponse } from "../utils/errorResponse";
 const route = Router();
@@ -17,5 +17,18 @@ route.get("/", authenticateUser, async (req, res) => {
     }
 });
 // PATCH /user    update a user
+route.patch("/", authenticateUser, async (req, res) => {
+    try {
+        const user = await updateUserData(req.body.user, (req as any).user.email);
+        return res.status(200).json({user});
+    } catch (e) {
+        return ErrorResponse(
+            res,
+            e,
+            422,
+            "Something went wrong while updating"
+        );
+    }
+});
 // TODO: create a route handler for patching user data
 export const userRoute = route;

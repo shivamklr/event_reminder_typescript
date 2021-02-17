@@ -4,6 +4,8 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne,
     JoinColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 
@@ -12,12 +14,23 @@ export class Event {
     @PrimaryGeneratedColumn()
     id: number;
     @Column()
-    name: string;
-    @Column()
-    description: string;
-    @Column()
-    date: Date;
+    title: string;
+    @Column({nullable:true})
+    description?: string;
+    @Column({type:"timestamptz"})
+    date: string;
     @ManyToOne(() => User)
-    @JoinColumn()
     author: User;
+
+    @CreateDateColumn({type:"timestamptz"})
+    createdAt: string;
+    @UpdateDateColumn({type:"timestamptz"})
+    updatedAt: string;
+    
+    constructor(title:string, description:string|undefined, date:string, author:User){
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.author = author;
+    }
 }

@@ -18,14 +18,14 @@ export class User {
     @Column({ nullable: true })
     password?: string;
 
-    @Column({ nullable: true })
-    dob?: Date;
+    @Column({type:"timestamptz" ,nullable: true })
+    dob?: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+    @CreateDateColumn({type:"timestamptz"})
+    createdAt: string;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+    @UpdateDateColumn({type:"timestamptz"})
+    updatedAt: string;
 
     token: string;
 }

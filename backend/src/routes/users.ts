@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, loginUser } from "../controllers/user";
+import { createUser, loginUser } from "../controllers/users";
 import { ErrorResponse } from "../utils/errorResponse";
 const route = Router();
 
@@ -20,12 +20,12 @@ route.post("/login", async (req, res) => {
 
 // POST /users
 route.post("/", async (req, res) => {
-    const { name, email, password } = req.body.user;
-    console.log("user object received in req body");
-    console.log({ name, email, password });
+    const { name, email, password, dob } = req.body.user;
+    console.log("==================user object received in req body=========");
+    console.log({ name, email, password, dob });
 
     try {
-        const user = await createUser({ name, email, password });
+        const user = await createUser({ name, email, password, dob });
 
         return res.status(201).json({ user });
     } catch (e) {
