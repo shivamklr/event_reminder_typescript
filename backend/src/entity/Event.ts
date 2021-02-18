@@ -3,7 +3,6 @@ import {
     Column,
     PrimaryGeneratedColumn,
     ManyToOne,
-    JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -19,7 +18,7 @@ export class Event {
     description?: string;
     @Column({type:"timestamptz"})
     date: string;
-    @ManyToOne(() => User)
+    @ManyToOne(type => User, user=>user.events)
     author: User;
 
     @CreateDateColumn({type:"timestamptz"})

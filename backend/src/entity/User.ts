@@ -4,7 +4,9 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     PrimaryColumn,
+    OneToMany,
 } from "typeorm";
+import {Event} from "./Event"
 
 @Entity("users")
 export class User {
@@ -26,6 +28,9 @@ export class User {
 
     @UpdateDateColumn({type:"timestamptz"})
     updatedAt: string;
+
+    @OneToMany(type=>Event, eventobj=>eventobj.author)
+    events:Event[];
 
     token: string;
 }
