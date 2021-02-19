@@ -40,9 +40,7 @@ export async function createEvent(
         );
         // save the event instance into the db
         let eventCreated = await getRepository(Event).save(event);
-        let findeventCreated = await getRepository(Event).findOne({ relations:["author"]})
-        if (findeventCreated === undefined) throw {};
-        return findeventCreated;
+        return eventCreated;
     } catch (e) {
         throw e;
     }

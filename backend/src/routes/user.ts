@@ -8,7 +8,7 @@ const route = Router();
 route.get("/", authenticateUser, async (req, res) => {
     // return user values
     try {
-        const user = await fetchUserData((req as any).user);
+        const user = await fetchUserData((req as any).user.email);
         return res.status(200).json({ user });
     } catch (e) {
         return ErrorResponse(res, e, 422, "Could not fetch the use info");

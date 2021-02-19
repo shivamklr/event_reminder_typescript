@@ -15,9 +15,6 @@ interface UserLoginData {
     email: string;
     password: string;
 }
-interface UserJWTData {
-    email: string;
-}
 
 interface UserUpdateData {
     name?: string;
@@ -46,16 +43,18 @@ export async function createUser({
     // Save the user in the database
     try {
         let hashedPassword = await hashFunction(password);
-        const user = await getRepository(User).save({
+        await getRepository(User).save({
             name,
             email,
             password: hashedPassword,
             dob
         });
         // include jwt token property in user object
-        user.token = await createJWT(user);
+        const user = await getRepository(User).findOne({select:["email", "name"], where:{email}});
+        // FIXME: Don't search in db for the user. Instead remove fields from save promise
+        (user as User).token = await createJWT((user as User));
         console.log({ user });
-        return SanitizeFields(user);
+        return (user as User);
     } catch (e) {
         throw e;
     }
@@ -73,7 +72,7 @@ export async function loginUser({
     }
     try {
         // Verify user in db
-        const user = await getRepository(User).findOne({ email });
+        const user = await getRepository(User).findOne({ select:["email", "password", "name"],where:{email} });
         if (user === undefined) {
             throw {
                 message: "User/Password does not match",
@@ -89,18 +88,18 @@ export async function loginUser({
             throw { message: "User/Password does not match", statusCode: 401 };
         }
         user.token = await createJWT(user);
-        return user;
+        return SanitizeFields(user);
     } catch (e) {
         throw e;
     }
 }
-export async function fetchUserData({ email }: UserJWTData): Promise<User> {
+export async function fetchUserData(email:string): Promise<User> {
     try {
-        const fetchedData = await getRepository(User).findOne({ email });
+        const fetchedData = await getRepository(User).findOne({select:["name","email","dob","createdAt"],where:{ email }});
         if (fetchedData === undefined) {
             throw new Error("User of that email does not exist");
         }
-        return SanitizeFields(fetchedData);
+        return fetchedData;
     } catch (e) {
         throw e;
     }

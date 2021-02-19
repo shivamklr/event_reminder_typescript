@@ -3,12 +3,12 @@ import { User } from "../entity/User";
 
 const JWT_SECRET = "somethingverySecret"; // TODO: move to config file
 
-export async function createJWT(payload: User): Promise<string> {
+export async function createJWT({name, email}: User): Promise<string> {
     return new Promise((resolve, reject) => {
         jwt.sign(
             {
-                name: payload.name,
-                email: payload.email,
+                name,
+                email
             },
             JWT_SECRET,
             {expiresIn:"1h"},
