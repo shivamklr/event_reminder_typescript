@@ -89,7 +89,7 @@ export async function loginUser({
             throw { message: "User/Password does not match", statusCode: 401 };
         }
         user.token = await createJWT(user);
-        return SanitizeFields(user);
+        return user;
     } catch (e) {
         throw e;
     }

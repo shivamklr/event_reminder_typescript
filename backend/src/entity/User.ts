@@ -6,31 +6,30 @@ import {
     PrimaryColumn,
     OneToMany,
 } from "typeorm";
-import {Event} from "./Event"
+import { Event } from "./Event";
 
 @Entity("users")
 export class User {
-    
     @PrimaryColumn()
     email: string;
 
     @Column({ nullable: false })
     name: string;
 
-    @Column({ nullable: true })
+    @Column({ select: false })
     password?: string;
-
-    @Column({type:"timestamptz" ,nullable: true })
+// password is optional because of sanitizePassword field
+    @Column({ type: "timestamptz", nullable: true })
     dob?: string;
 
-    @CreateDateColumn({type:"timestamptz"})
+    @CreateDateColumn({ type: "timestamptz" })
     createdAt: string;
 
-    @UpdateDateColumn({type:"timestamptz"})
+    @UpdateDateColumn({ type: "timestamptz" })
     updatedAt: string;
 
-    @OneToMany(type=>Event, eventobj=>eventobj.author)
-    events:Event[];
+    @OneToMany((type) => Event, (eventobj) => eventobj.author)
+    events: Event[];
 
     token: string;
 }

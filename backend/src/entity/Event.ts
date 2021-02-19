@@ -5,6 +5,7 @@ import {
     ManyToOne,
     CreateDateColumn,
     UpdateDateColumn,
+    JoinColumn,
 } from "typeorm";
 import { User } from "./User";
 
@@ -14,19 +15,26 @@ export class Event {
     id: number;
     @Column()
     title: string;
-    @Column({nullable:true})
+    @Column({ nullable: true })
     description?: string;
-    @Column({type:"timestamptz"})
+    @Column({ type: "timestamptz" })
     date: string;
-    @ManyToOne(type => User, user=>user.events)
+    @Column({nullable:true})
+    authorEmail:string;
+    @ManyToOne((type) => User, (user) => user.events)
     author: User;
 
-    @CreateDateColumn({type:"timestamptz"})
+    @CreateDateColumn({ type: "timestamptz" })
     createdAt: string;
-    @UpdateDateColumn({type:"timestamptz"})
+    @UpdateDateColumn({ type: "timestamptz" })
     updatedAt: string;
-    
-    constructor(title:string, description:string|undefined, date:string, author:User){
+
+    constructor(
+        title: string,
+        description: string | undefined,
+        date: string,
+        author: User
+    ) {
         this.title = title;
         this.description = description;
         this.date = date;

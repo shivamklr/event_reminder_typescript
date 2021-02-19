@@ -30,7 +30,7 @@ async function start() {
                 "postgres://lojgecoxlxnkvg:95886668f5c8add1cf6d7af4090b883aee8eccdb874a2bac919be19de40a339f@ec2-54-155-226-153.eu-west-1.compute.amazonaws.com:5432/d7h62rbad1gt05",
             entities: [User, Event],
             synchronize: true,
-            // dropSchema:true, //TODO: REMOVE BEFORE PRODUCTION
+            dropSchema:true, //TODO: REMOVE BEFORE PRODUCTION
             logging: true,
             extra: {
                 ssl: {

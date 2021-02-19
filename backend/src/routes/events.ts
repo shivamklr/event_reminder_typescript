@@ -22,7 +22,7 @@ route.patch("/", authenticateUser, async (req, res) => {
         if ((req as any).user === undefined) {
             throw { message: "User does not exist", statusCode:422 };
         }
-        console.log(req.user);
+        console.log((req as any).user);
         
         const data = req.body.event;
         const event = await updateEvent(data, (req as any).user.email);

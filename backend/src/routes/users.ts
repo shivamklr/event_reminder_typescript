@@ -3,7 +3,7 @@ import { createUser, loginUser } from "../controllers/users";
 import { ErrorResponse } from "../utils/errorResponse";
 const route = Router();
 
-// POST /users/login
+// POST /users/login    login a user
 route.post("/login", async (req, res) => {
     const { email, password } = req.body.user;
     try {
@@ -18,7 +18,7 @@ route.post("/login", async (req, res) => {
     }
 });
 
-// POST /users
+// POST /users  create a new user
 route.post("/", async (req, res) => {
     const { name, email, password, dob } = req.body.user;
     console.log("==================user object received in req body=========");

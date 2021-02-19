@@ -39,9 +39,10 @@ export async function createEvent(
             SanitizeFields(user)
         );
         // save the event instance into the db
-        const eventCreated = await getRepository(Event).save(event);
-        if (eventCreated === undefined) throw {};
-        return eventCreated;
+        let eventCreated = await getRepository(Event).save(event);
+        let findeventCreated = await getRepository(Event).findOne({ relations:["author"]})
+        if (findeventCreated === undefined) throw {};
+        return findeventCreated;
     } catch (e) {
         throw e;
     }
@@ -69,15 +70,15 @@ export async function updateEvent(
         throw { message: "Author and User mismatch", statusCode: 400 };
     }
     try {
-        const newEvent: any = undefined;
+        const newEvent = {};
         if (title !== undefined) {
-            newEvent.title = title;
+            (newEvent as any).title = title;
         }
         if (description !== undefined) {
-            newEvent.description = description;
+            (newEvent as any).description = description;
         }
         if (date !== undefined) {
-            newEvent.date = date;
+            (newEvent as any).date = date;
         }
         const updatedEvent = await getRepository(Event).save(newEvent);
         console.log({updatedEvent});
