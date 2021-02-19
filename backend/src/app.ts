@@ -6,6 +6,7 @@ import { Event } from "./entity/Event";
 import { usersRoute } from "./routes/users";
 import { userRoute } from "./routes/user";
 import { eventsRoute } from "./routes/events";
+import { eventRoute } from "./routes/event";
 
 //creating an express instance
 const app = express();
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use("/api/users", usersRoute);
 app.use("/api/user", userRoute);
 app.use("/api/events", eventsRoute);
-
+app.use("/api/event", eventRoute);
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
@@ -30,7 +31,7 @@ async function start() {
                 "postgres://lojgecoxlxnkvg:95886668f5c8add1cf6d7af4090b883aee8eccdb874a2bac919be19de40a339f@ec2-54-155-226-153.eu-west-1.compute.amazonaws.com:5432/d7h62rbad1gt05",
             entities: [User, Event],
             synchronize: true,
-            dropSchema:true, //TODO: REMOVE BEFORE PRODUCTION
+            dropSchema: true, //TODO: REMOVE BEFORE PRODUCTION
             logging: true,
             extra: {
                 ssl: {

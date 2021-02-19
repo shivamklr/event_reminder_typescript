@@ -23,7 +23,7 @@ export async function createEvent(
         throw { message: "title missing from event", statusCode: 400 };
     }
     if (date === undefined) {
-        throw { message: "date missing from event", statusCode: 400  };
+        throw { message: "date missing from event", statusCode: 400 };
     }
     try {
         // Find user from email
@@ -58,12 +58,12 @@ export async function updateEvent(
         throw { message: "No data fields to update", statusCode: 400 };
     }
     const event = await getRepository(Event).findOne({ id });
-    
+
     if (event === undefined) {
         throw { message: "Event does not exist", statusCode: 400 };
     }
     console.log(event);
-    
+
     if (event.author.email !== email) {
         throw { message: "Author and User mismatch", statusCode: 400 };
     }
@@ -79,8 +79,41 @@ export async function updateEvent(
             (newEvent as any).date = date;
         }
         const updatedEvent = await getRepository(Event).save(newEvent);
-        console.log({updatedEvent});
+        console.log({ updatedEvent });
         return updatedEvent;
+    } catch (e) {
+        throw e;
+    }
+}
+export async function getEventById(num: number, email: string): Promise<Event> {
+    try {
+        // Data validation
+        if (num === undefined) {
+            throw {
+                message: "Did not provide a key to find the event",
+                statusCode: 400,
+            };
+        }
+        // Searching in the db
+        const eventRow = await getRepository(Event).findOne({
+            select: ["id", "title", "description", "date", "authorEmail"],
+            where: { id: num },
+        });
+        // Confirming the existence
+        if (eventRow === undefined) {
+            throw {
+                message: "Does not exist",
+                statusCode: 404,
+            };
+        }
+        // matching authors with the user
+        if (email !== eventRow.authorEmail) {
+            throw {
+                message: "Author-User mismatch",
+                statusCode: 401,
+            };
+        }
+        return eventRow;
     } catch (e) {
         throw e;
     }
@@ -93,7 +126,4 @@ export async function updateEvent(
 // }
 // export async function getAllEventsByUser():Promise<Event[]>{
 //     return [];
-// }
-// export async function getEventById():Promise<Event>{
-//     return new Event();
 // }
