@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createEvent, updateEvent } from "../controllers/events";
+import { createEvent, getAllEventsByUser, updateEvent } from "../controllers/events";
 import { authenticateUser } from "../middleware/auth";
 import { ErrorResponse } from "../utils/errorResponse";
 const route = Router();
@@ -31,4 +31,17 @@ route.patch("/", authenticateUser, async (req, res) => {
         return ErrorResponse(res, e, 400, "Could not update the event");
     }
 });
+// GET /api/events  get the events related to a particular user on a date
+route.get("/", authenticateUser, async(req, res)=>{
+    try {
+        if ((req as any).user === undefined) {
+            throw { message: "User does not exist", statusCode:422 };
+        }
+        const data = req.body.event;
+        const events = await getAllEventsByUser(data.date.to, data.date.from, (req as any).user.email);
+        return res.status(200).json(events);
+    } catch (e) {
+        return ErrorResponse(res, e, 400, "Could not update the event");
+    }
+})
 export const eventsRoute = route;

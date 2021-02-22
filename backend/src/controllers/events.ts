@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { Between, getRepository } from "typeorm";
 import { Event } from "../entity/Event";
 import { User } from "../entity/User";
 import { SanitizeFields } from "../utils/sanitizePassword";
@@ -60,27 +60,27 @@ export async function updateEvent(
     const event = await getRepository(Event).findOne({ id });
 
     if (event === undefined) {
-        throw { message: "Event does not exist", statusCode: 400 };
+        throw { message: "Event with that id does not exist", statusCode: 400 };
     }
     console.log(event);
 
-    if (event.author.email !== email) {
+    if (event.authorEmail !== email) {
         throw { message: "Author and User mismatch", statusCode: 400 };
     }
     try {
-        const newEvent = {};
+        
         if (title !== undefined) {
-            (newEvent as any).title = title;
+            event.title = title;
         }
         if (description !== undefined) {
-            (newEvent as any).description = description;
+            event.description = description;
         }
         if (date !== undefined) {
-            (newEvent as any).date = date;
+            event.date = date;
         }
-        const updatedEvent = await getRepository(Event).save(newEvent);
+        const updatedEvent = await getRepository(Event).save(event);
         console.log({ updatedEvent });
-        return updatedEvent;
+        return updatedEvent as Event;
     } catch (e) {
         throw e;
     }
@@ -118,12 +118,41 @@ export async function getEventById(num: number, email: string): Promise<Event> {
         throw e;
     }
 }
+export async function getAllEventsByUser(
+    to: string,
+    from: string,
+    email: string
+): Promise<Event[]> {
+    // Data Validation
+    if(to === undefined){
+        throw{message:"to not defined", statusCode:400};
+    }
+    if(from === undefined){
+        throw{message:"from not defined", statusCode:400};
+    }
+    if(email === undefined){
+        throw{message:"User does not found", statusCode:401};
+    }
+    try {
+        // Confirm if user exist
+        const user = await getRepository(User).findOne({
+            select: ["email"],
+            where: { email },
+        });
+        // User not found in db
+        if (user === undefined) {
+            throw { message: "User does not exist", statusCode: 422 };
+        }
+        // Find all rows where foreign key is email
+        const eventRows = await getRepository(Event).find({
+            select: ["title", "description", "date", "authorEmail"],
+            where: { authorEmail: user.email, date: Between(from, to) },
+        });
+        return eventRows;
+    } catch (e) {
+        throw e;
+    }
+}
 // export async function deleteEvent():Promise<Event>{
 //     return new Event();
-// }
-// export async function updateEvent():Promise<Event>{
-//     return new Event();
-// }
-// export async function getAllEventsByUser():Promise<Event[]>{
-//     return [];
 // }
