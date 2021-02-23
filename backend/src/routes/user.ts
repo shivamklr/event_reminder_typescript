@@ -30,5 +30,4 @@ route.patch("/", authenticateUser, async (req, res) => {
         );
     }
 });
-// TODO: create a route handler for patching user data
 export const userRoute = route;

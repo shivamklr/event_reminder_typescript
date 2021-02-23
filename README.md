@@ -1,6 +1,10 @@
 # Event Reminder Application
 ## Introduction
-A Progressive Web Application that can remind users of the events they want to be reminded.
+A FullStack Application that can remind users of the annual events. For example: birthday, wedding anniversary.
+
+## Status
+[x] Backend/REST API
+[]  Frontend
 
 ## Technologies Used
 - Backend
@@ -12,6 +16,7 @@ A Progressive Web Application that can remind users of the events they want to b
 
 ## Available Scripts
 In this project you can run :
+<!-- Mention backend and frontend seperately -->
 ### `npm run build`
 Builds the app for production in `dist` folder.<br>
 Internally it runs `tsc` on the command line.
