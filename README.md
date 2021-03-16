@@ -3,7 +3,7 @@
 A FullStack Application that can remind users of the annual events. For example: birthday, wedding anniversary.
 
 ## Status of Completion
-- [x] Backend/REST API
+- [x] Backend/REST API [Live Link](https://documenter.getpostman.com/view/12535754/Tz5s5cfh)
 - [ ]  Frontend
 
 ## Technologies Used
